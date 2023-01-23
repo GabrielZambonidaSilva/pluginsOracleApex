@@ -28,7 +28,7 @@ prompt APPLICATION 155891 - Treinamento - HOS
 -- Application Export:
 --   Application:     155891
 --   Name:            Treinamento - HOS
---   Date and Time:   15:49 Monday January 23, 2023
+--   Date and Time:   15:54 Monday January 23, 2023
 --   Exported By:     GABIRIEL09@GMAIL.COM
 --   Flashback:       0
 --   Export Type:     Component Export
@@ -72,7 +72,9 @@ wwv_flow_imp_shared.create_plugin(
 ,p_render_function=>'LOV_FORMAT'
 ,p_substitute_attributes=>true
 ,p_subscribe_plugin_settings=>true
+,p_help_text=>'This plugin Enable a Advanced Selection Type for Lov Popup'
 ,p_version_identifier=>'1.0'
+,p_about_url=>'https://github.com/GabrielZambonidaSilva/pluginsOracleApex/tree/main/popUpLov-AdvancedSelect'
 ,p_files_version=>82
 );
 end;
