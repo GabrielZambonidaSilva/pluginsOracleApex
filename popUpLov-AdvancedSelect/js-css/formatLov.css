@@ -1,1 +1,69 @@
+.a-IconList {
+    list-style: 'none';
+    margin: '0';
+    padding: '0';
+}
+.a-IconList span{
+    border-color: transparent !important;
+    background-color: hsl(210, 61%, 50%, 50%) !important;
+}
+.a-IconList li{
+    border: transparent !important;
+    background-color: var(--a-field-input-state-background-color,var(--a-field-input-background-color)) !important;
+}
 
+.a-IconList span.menuFilhoLov{
+    border-color: transparent !important;
+    background-color: transparent !important;
+}
+
+.a-IconList .menuPaiLov{
+    border-color: transparent !important;
+    background-color: black !important;
+}
+
+.a-PopupLOV-results .a-IconList-item:hover {
+    background-color: hsl(210, 61%, 50%, 25%) !important;
+    color: #000000;
+    box-shadow: 0 0 0 1px hsl(210, 61%, 45%) inset;
+}
+
+.form-check-input:checked[type=checkbox] {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='M6 10l3 3l6-6'/%3e%3c/svg%3e");
+}
+
+.form-check-input:checked {
+    background-color: blue;
+    border-color: blue;
+}
+
+.form-check-input:focus {
+    border-color: hsl(210, 61%, 50%, 25%) !important;
+    outline: 0;
+    box-shadow: 0 0 0 .25rem white !important;
+}
+
+.form-check-input[type=checkbox] {
+    border-radius: .25em;
+}
+
+.form-check .form-check-input {
+    float: left;
+}
+
+.form-check-input {
+    cursor: pointer;
+    width: 1em;
+    height: 1em;
+    vertical-align: top;
+    background-color: #fff;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    border: 1px solid rgba(0,0,0,.25);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    -webkit-print-color-adjust: exact;
+    color-adjust: exact;
+}
