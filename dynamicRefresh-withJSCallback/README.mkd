@@ -1,1 +1,45 @@
+## Dynamic Refresh - With JS CallBack
+---
+This Plugin allows to obtain the visibility information of the region on the user's screen, being able to pass a Callback function to execute the desired action, for example, using the information to trigger the update of the region.
+
+#####How to use:
+- **Create Dynamic Action**:
+    - Settings:
+    Event = Page Load
+    Condition = True
+    Action = Initialize -> Dynamic Refresh - With JS CallBack
+
+    **Definitions**:
+    - **Selector elements - Array type**:
+        - Array selector of the regions or elements you want to obtain information.
+    **Must be the element with the "id" attribute in the HTML**
+    - **CallBack Javascript Code**:
+        - In this definition we had the callback function that we want to execute after the code creates the object below:
+        ```javascript
+             [
+                {
+                    "region": "IRR1",
+                    "visible": true
+                },
+                {
+                    "region": "IRR2",
+                    "visible": false
+                }
+            ]
+        ```
+        The function must receive a parameter, from there, the logic can be dynamically as needed.
+        In the plugin code example, the callback triggers the apex.region API to update the regions.
+        ```javascript
+            (e) => {
+                // Iterable in "e" Array Object
+                e.forEach((e) => {
+                    let elem = document.getElementById(e.region)
+                    
+                    if (e.visible && !elem.hasAttribute('refreshprop')){
+                        apex.region(elem.id).refresh()
+                        elem.setAttribute('refreshprop', true)
+                    }                     
+                })
+            }
+        ```
 
