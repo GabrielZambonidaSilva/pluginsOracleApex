@@ -501,3 +501,6 @@ function formatLov(){
     }
 }
 
+$(
+    formatLov()
+)
