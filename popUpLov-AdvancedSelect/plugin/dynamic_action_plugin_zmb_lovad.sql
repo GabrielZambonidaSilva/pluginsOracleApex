@@ -16,24 +16,24 @@ wwv_flow_api.import_begin (
  p_version_yyyy_mm_dd=>'2021.04.15'
 ,p_release=>'21.1.3'
 ,p_default_workspace_id=>2878693287648244
-,p_default_application_id=>120
+,p_default_application_id=>122
 ,p_default_id_offset=>0
 ,p_default_owner=>'ERP'
 );
 end;
 /
  
-prompt APPLICATION 120 - ERP
+prompt APPLICATION 122 - CareUp
 --
 -- Application Export:
---   Application:     120
---   Name:            ERP
---   Date and Time:   13:03 Segunda-Feira Janeiro 23, 2023
+--   Application:     122
+--   Name:            CareUp
+--   Date and Time:   12:23 Quarta-Feira Fevereiro 1, 2023
 --   Exported By:     BEEASY.GABRIEL
 --   Flashback:       0
 --   Export Type:     Component Export
 --   Manifest
---     PLUGIN: 127884128495106825
+--     PLUGIN: 259402591875734003
 --   Manifest End
 --   Version:         21.1.3
 --   Instance ID:     649842172119056
@@ -47,7 +47,7 @@ end;
 prompt --application/shared_components/plugins/dynamic_action/zmb_lovad
 begin
 wwv_flow_api.create_plugin(
- p_id=>wwv_flow_api.id(127884128495106825)
+ p_id=>wwv_flow_api.id(259402591875734003)
 ,p_plugin_type=>'DYNAMIC ACTION'
 ,p_name=>'ZMB.LOVAD'
 ,p_display_name=>'LOV - Advanced Selection'
@@ -66,7 +66,7 @@ wwv_flow_api.create_plugin(
 'IS',
 '    L_RESULT                APEX_PLUGIN.T_DYNAMIC_ACTION_RENDER_RESULT; ',
 'BEGIN',
-'    L_RESULT.JAVASCRIPT_FUNCTION := ''formatLov()'';',
+'    L_RESULT.JAVASCRIPT_FUNCTION := ''console.log(''''Plugin LOV Inicialized'''')'';',
 '    RETURN L_RESULT;',
 'END;'))
 ,p_api_version=>2
@@ -77,7 +77,7 @@ wwv_flow_api.create_plugin(
 ,p_version_identifier=>'1.0'
 ,p_about_url=>'https://github.com/GabrielZambonidaSilva/pluginsOracleApex/tree/main/popUpLov-AdvancedSelect'
 ,p_plugin_comment=>'This plugin Enable a Advanced Selection Type for Lov Popup'
-,p_files_version=>4
+,p_files_version=>5
 );
 end;
 /
@@ -284,14 +284,14 @@ wwv_flow_api.g_varchar2_table(198) := '20202020202020202020202020206C65742064697
 wwv_flow_api.g_varchar2_table(199) := '0D0A2020202020202020202020202020202020202020290D0A2020202020202020202020202020202020202020202020203F206576656E742E7461726765742E76616C75652E73706C697428223C2F67726F7570526F773E22295B315D0D0A2020202020';
 wwv_flow_api.g_varchar2_table(200) := '202020202020202020202020202020202020203A206576656E742E7461726765742E76616C75653B0D0A0D0A20202020202020202020202020202020202020202F2F2073657461206F2076616C6F72206E6F204C4F560D0A202020202020202020202020';
 wwv_flow_api.g_varchar2_table(201) := '202020202020202024286023247B69647D60292E76616C28646973706C617956616C7565293B0D0A202020202020202020202020202020207D0D0A2020202020202020202020207D290D0A2020202020202020202020202E6368616E676528293B202F2F';
-wwv_flow_api.g_varchar2_table(202) := '206573736520222E6368616E676528292220C3A9207061726120726F646172206E6F2072656164792074616D62C3A96D3B0D0A202020207D0D0A7D0D0A0D0A';
+wwv_flow_api.g_varchar2_table(202) := '206573736520222E6368616E676528292220C3A9207061726120726F646172206E6F2072656164792074616D62C3A96D3B0D0A202020207D0D0A7D0D0A0D0A24280D0A20202020666F726D61744C6F7628290D0A29';
 null;
 end;
 /
 begin
 wwv_flow_api.create_plugin_file(
- p_id=>wwv_flow_api.id(127884509061109376)
-,p_plugin_id=>wwv_flow_api.id(127884128495106825)
+ p_id=>wwv_flow_api.id(259402972441736554)
+,p_plugin_id=>wwv_flow_api.id(259402591875734003)
 ,p_file_name=>'JS/formatLov.js'
 ,p_mime_type=>'application/javascript'
 ,p_file_charset=>'utf-8'
@@ -538,8 +538,8 @@ end;
 /
 begin
 wwv_flow_api.create_plugin_file(
- p_id=>wwv_flow_api.id(127884845401109377)
-,p_plugin_id=>wwv_flow_api.id(127884128495106825)
+ p_id=>wwv_flow_api.id(259403308781736555)
+,p_plugin_id=>wwv_flow_api.id(259402591875734003)
 ,p_file_name=>'JS/jquery.mask.js'
 ,p_mime_type=>'application/javascript'
 ,p_file_charset=>'utf-8'
@@ -573,8 +573,8 @@ end;
 /
 begin
 wwv_flow_api.create_plugin_file(
- p_id=>wwv_flow_api.id(127885365788111974)
-,p_plugin_id=>wwv_flow_api.id(127884128495106825)
+ p_id=>wwv_flow_api.id(259403829168739152)
+,p_plugin_id=>wwv_flow_api.id(259402591875734003)
 ,p_file_name=>'CSS/formatLov.css'
 ,p_mime_type=>'text/css'
 ,p_file_charset=>'utf-8'
