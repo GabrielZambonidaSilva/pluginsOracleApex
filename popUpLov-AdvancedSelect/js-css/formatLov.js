@@ -6,7 +6,7 @@ function setValuePOPLOV(itemId, value, displayValue, suprimirAlteracao) {
 
 // ITEM LOV POP UP - Organizar Menu
 
-function organizeMenuLov(nomeLov, numeroPagina, classMenuSelect, window) {
+function organizaMenuLov(nomeLov, numeroPagina, classMenuSelect, window) {
     //Capturo todos os objetos do list
     let linha = document.querySelectorAll(
         "#PopupLov_" + numeroPagina + "_" + nomeLov + "_dlg ul li:not([menu-id])"
@@ -24,10 +24,10 @@ function organizeMenuLov(nomeLov, numeroPagina, classMenuSelect, window) {
         innerDoc = iframe[iframeLen].contentDocument || iframe[iframeLen].contentWindow.document;
 
         itemLov = innerDoc.getElementById(nomeLov)
-        itemLovIsMulti = $(itemLov).closest('li.apex-item-multi-item') ? true : false
+        itemLovIsMulti = $(itemLov).closest('li.apex-item-multi-item').length > 0 ? true : false
     } catch (error) {
         itemLov = $(`#${nomeLov}`)
-        itemLovIsMulti = $(itemLov).closest('li.apex-item-multi-item') ? true : false
+        itemLovIsMulti = $(itemLov).closest('li.apex-item-multi-item').length > 0 ? true : false
         
     }
     
@@ -216,162 +216,186 @@ function organizeMenuLov(nomeLov, numeroPagina, classMenuSelect, window) {
         ZMB - 19/01/2023 FIM
     */
 
-
-    //adiciono a função no menu
     if (classMenuSelect) {
-        //Css Nos Menus
-        $("#PopupLov_" + numeroPagina + "_" + nomeLov + "_dlg ul span").css(
-            "cursor",
-            "pointer"
-        );
-        // Evento de OnCLick nos menus pais
-        
-        $("#PopupLov_" + numeroPagina + "_" + nomeLov + "_dlg ul span").on(
-            "click",
-            function () {
-                let returnValue = [];
-                let displayValue = [];
-
-                // pega os valores que já estao na lov
-                let valueLov = window
-                    .$(`#${nomeLov}`)
-                    .closest("ul.apex-item-multi")
-                    .find("li[data-value]");
-
-                    
-                // passa eles para os arrays
-                for (let i = 0; i < valueLov.length; i++) {
-                    const element = $(valueLov[i]);
-                    returnValue.push(element.attr("data-value"));
-                    displayValue.push(element.text());
-                }
-                // Capturo todos os filhos
-                let childElements = $(this)
-                    .parent()
-                    .find('li[menu-id="' + $(this).attr("menu-id") + '"]');
-
-
-
-                // Alimento o Array com os Valores do menu atual clicado
-                childElements.map((e) => {
-                    // verifica se o valor já esta no array
-                    let id = String($(childElements[e]).data("id"));
-                    if (!returnValue.includes(id)) {
-                        returnValue.push(id);
-                        displayValue.push($(childElements[e]).text());
+            //Css Nos Menus
+            top.$("#PopupLov_" + numeroPagina + "_" + nomeLov + "_dlg ul span").css(
+                "cursor",
+                "pointer"
+            );
+            // Evento de OnCLick nos menus pais
+            top.$("#PopupLov_" + numeroPagina + "_" + nomeLov + "_dlg ul span").on(
+                "click",
+                function () {
+                    let returnValue = [];
+                    let displayValue = [];
+    
+                    // pega os valores que já estao na lov
+                    let valueLov = window
+                        .$(`#${nomeLov}`)
+                        .closest("ul.apex-item-multi")
+                        .find("li[data-value]");
+    
+                        
+                    // passa eles para os arrays
+                    for (let i = 0; i < valueLov.length; i++) {
+                        const element = $(valueLov[i]);
+                        returnValue.push(element.attr("data-value"));
+                        displayValue.push(element.text());
                     }
-
-                    //Zmb - 08/12/2022 
-                    if (itemLovIsMulti) {
-                        $(childElements[e]).prev().prop('checked', true)
+                    // Capturo todos os filhos
+                    let childElements = $(this)
+                        .parent()
+                        .find('li[menu-id="' + $(this).attr("menu-id") + '"]');
+    
+                    // Alimento o Array com os Valores do menu atual clicado
+                    childElements.map((e) => {
+                        // verifica se o valor já esta no array
+                        let id = String($(childElements[e]).data("id"));
+                        if (!returnValue.includes(id)) {
+                            returnValue.push(id);
+                            displayValue.push($(childElements[e]).text());
+                        }
+    
+                        //Zmb - 08/12/2022 
+                        if (itemLovIsMulti) {
+                            top.$(childElements[e]).prev().prop('checked', true)
+                        }
+                        //Zmb - 08/12/2022 FIM
+                    });
+    
+                    // Seto os valores
+                    window.setValuePOPLOV(nomeLov, returnValue, displayValue);
+    
+                     //Zmb - 08/12/2022
+                     if (itemLovIsMulti) {
+                        // Evento no x dos elementos selecionados no input
+                        eventRemove()
                     }
                     //Zmb - 08/12/2022 FIM
-                });
-
-                // Seto os valores
-                window.setValuePOPLOV(nomeLov, returnValue, displayValue);
-
-                 //Zmb - 08/12/2022
-                 if (itemLovIsMulti) {
-                    // Evento no x dos elementos selecionados no input
-                    eventRemove()
+    
+                    // Ajusto o Cabeçalho
+                    window.$("#" + nomeLov + "_CONTAINER").addClass("is-active");
                 }
-                //Zmb - 08/12/2022 FIM
-
-                // Ajusto o Cabeçalho
-                window.$("#" + nomeLov + "_CONTAINER").addClass("is-active");
-            }
-        );
-        
-    }
-    //variavel Menu, Irá sempre ser alimentada pelo Menu Coletado da linha
-    let menu = "";
-    //Variavel que será alimentada caso for a primeira vez do loop, ou for != da variavel menu
-    let menu_atual = "";
-    //De Fato, a String do Submenu  || Menu -> SubMenu
-    let menu_filho = "";
-    // Css da Linha do Menu
-    let cssStyleMenu =
-        "font-weight: bold; border-width: 0.01px; border-style: solid; display: flex; padding: 8px 12px; ";
-    //Css Da Linha do SubMenu
-    let cssStyleSubMenu =
-        "text-indent: 3rem; border-width: 2px; border-style: solid; border-color: lightgrey;";
-
-    try {
-        //COntador apenas para dizer a sequencia dos menus
-        let cont = 0;
-        linha.forEach(function (e) {
-            //Pego a Linha com Menu e Sub Menu Junto
-            let t = e.innerText;
-            // Faço o IF, para ver se preciso executar a lógica ou o que esta renderizado ainda não foi tratado
-            if (t.indexOf("<groupRow>") >= 0) {
-                //Coleto Somente a Descrição do Menu
-                menu = t
-                    .substr(
-                        t.indexOf("<groupRow>"),
-                        t.indexOf("</groupRow>")
-                    )
-                    .replaceAll("<groupRow>", "");
-                // COleto a Descrição do Menu Filho
-                menu_filho = t
-                    .substr(t.indexOf("</groupRow>"))
-                    .replaceAll("</groupRow>", "");
-
-                // Caso for a primeira Vez
-                if (menu_atual.length <= 0) {
-                    //alimento o contador
-                    cont += 1;
-                    //Alimento com o menu coletado acima, preciso disso para verificar diferenças entre o ultimo menu inserido e o próximo
-                    menu_atual = menu;
-                    // Crio o Element Span
-                    let novoTitulo = document.createElement("span");
-
-                    //Texto do Elemento
-                    $.parseHTML(menu_atual).map((e) => {
-                        //Inclui o Elemento
-                        novoTitulo.appendChild(e);
-                    })
-
-                    //Atributo Css
-                    novoTitulo.setAttribute("style", cssStyleMenu);
-                    //atributo de contador
-                    novoTitulo.setAttribute("menu-id", cont);
-                    // Insiro ANTES da linha
-                    e.before($(novoTitulo)[0]);
-                } else if (menu_atual != menu) {
-                    //alimento o contador
-                    cont += 1;
-                    //Alimento com o menu coletado acima, preciso disso para verificar diferenças entre o ultimo menu inserido e o próximo
-                    menu_atual = menu;
-                    // Crio o Element Span
-                    let novoTitulo = document.createElement("span");
+            );
+            
+        }
+    
+        //variavel Menu, Irá sempre ser alimentada pelo Menu Coletado da linha
+        let menu = "";
+        //Variavel que será alimentada caso for a primeira vez do loop, ou for != da variavel menu
+        let menu_atual = "";
+        //De Fato, a String do Submenu  || Menu -> SubMenu
+        let menu_filho = "";
+        // Css da Linha do Menu
+        let cssStyleMenu =
+            "font-weight: bold; border-width: 0.01px; border-style: solid; display: flex; padding: 8px 12px; ";
+        //Css Da Linha do SubMenu
+        let cssStyleSubMenu =
+            "text-indent: 3rem; border-width: 2px; border-style: solid; border-color: lightgrey;";
+    
+        function existeMenuPai(menu_atual){
+            let menuAux = Array.from(top.$("#PopupLov_" + numeroPagina + "_" + nomeLov + "_dlg ul span[menu-id]")).filter((e) => {
+                return top.$(e).text().toUpperCase() == menu_atual.toUpperCase();
+            })
+    
+            return menuAux;
+        }
+    
+        try {
+            //Contador apenas para dizer a sequencia dos menus
+            let cont = 0;
+            linha.forEach(function (e) {
+                //Pego a Linha com Menu e Sub Menu Junto
+                let t = e.innerText;
+                // Faço o IF, para ver se preciso executar a lógica ou o que esta renderizado ainda não foi tratado
+                if (t.indexOf("<groupRow>") >= 0) {
+                    //Coleto Somente a Descrição do Menu
+                    menu = t
+                        .substr(
+                            t.indexOf("<groupRow>"),
+                            t.indexOf("</groupRow>")
+                        )
+                        .replaceAll("<groupRow>", "");
+                    // Coleto a Descrição do Menu Filho
+                    menu_filho = t
+                        .substr(t.indexOf("</groupRow>"))
+                        .replaceAll("</groupRow>", "");
                     
-                    //Texto do Elemento
-                    $.parseHTML(menu_atual).map((e) => {
+                    // Caso for a primeira Vez
+                    if (menu_atual.length <= 0) {
+                        //alimento o contador
+                        cont += 1;
+                        //Alimento com o menu coletado acima, preciso disso para verificar diferenças entre o ultimo menu inserido e o próximo
+                        menu_atual = menu;
+    
+                        //valido se já existe algum menu pai existente em tela, caso exista eu recupero o html dele em Array
+                        let menuPaiExistente = existeMenuPai(menu_atual);
+                        
+                        //Valido se o array retornado para a variável menuPaiExistente é maior que 0, caso seja existe um menu pai, nesse caso não faz nada
+                        if (!menuPaiExistente.length > 0){
+                            // Crio o Element Span
+                            let novoTitulo = document.createElement("span");
+    
+                            //Texto do Elemento
+                            $.parseHTML(menu_atual).map((e) => {
+                                //Inclui o Elemento
+                                novoTitulo.appendChild(e);
+                            })
+    
+                            //Atributo Css
+                            novoTitulo.setAttribute("style", cssStyleMenu);
+                            //atributo de contador
+                            novoTitulo.setAttribute("menu-id", cont);
+                            // Insiro ANTES da linha
+                            e.before($(novoTitulo)[0]);
+                        } else {
+                            //caso exista o menu pai em tela então eu apenas recupero o menu-id dele para passar para seus novos filhos, e no próximo será somada a variável cont para o próximo pai
+                            cont = toNumber($(menuPaiExistente).attr('menu-id'))
+                        }
+                    } else if (menu_atual != menu) {
+                        //alimento o contador
+                        cont += 1;
+                        //Alimento com o menu coletado acima, preciso disso para verificar diferenças entre o ultimo menu inserido e o próximo
+                        menu_atual = menu;
+    
+                        //valido se já existe algum menu pai existente em tela, caso exista eu recupero o html dele em Array
+                        let menuPaiExistente = existeMenuPai(menu_atual);
+    
+                        //Valido se o array retornado para a variável menuPaiExistente é maior que 0, caso seja existe um menu pai, nesse caso não faz nada
+                        if (!menuPaiExistente.length > 0){
+                            // Crio o Element Span
+                            let novoTitulo = document.createElement("span");
+                                
+                            //Texto do Elemento
+                            $.parseHTML(menu_atual).map((e) => {
+                                // //Inclui o Elemento
+                                novoTitulo.appendChild(e);
+                            })
+    
+                            //Atributo Css
+                            novoTitulo.setAttribute("style", cssStyleMenu);
+                            //atributo de contador
+                            novoTitulo.setAttribute("menu-id", cont);
+                            // Insiro ANTES da linha
+                            e.before($(novoTitulo)[0])
+                        } else {
+                            //caso exista o menu pai em tela então eu apenas recupero o menu-id dele para passar para seus novos filhos, e no próximo será somada a variável cont para o próximo pai
+                            cont = toNumber($(menuPaiExistente).attr('menu-id'))
+                        }
+                    }
+    
+                    // REFATORO A LINHA COM O TEXTO CORRETO DO SUBMENU
+                    e.innerText = "";
+                    $.parseHTML(menu_filho).map((element) => {
                         // //Inclui o Elemento
-                        novoTitulo.appendChild(e);
+                        e.appendChild(element);
                     })
-
-                    //Atributo Css
-                    novoTitulo.setAttribute("style", cssStyleMenu);
-                    //atributo de contador
-                    novoTitulo.setAttribute("menu-id", cont);
-                    // Insiro ANTES da linha
-                    e.before($(novoTitulo)[0]);
+    
+                    // APLICO O RECUO
+                    e.setAttribute("style", cssStyleSubMenu);
+                    e.setAttribute("menu-id", cont);
                 }
-
-                // REFATORO A LINHA COM O TEXTO CORRETO DO SUBMENU
-                e.innerText = "";
-                $.parseHTML(menu_filho).map((element) => {
-                    // //Inclui o Elemento
-                    e.appendChild(element);
-                })
-
-                // APLICO O RECUO
-                e.setAttribute("style", cssStyleSubMenu);
-                e.setAttribute("menu-id", cont);
-            }
-        });
+            });
 
         //Zmb - 08/12/2022 
         if (itemLovIsMulti) {
@@ -401,14 +425,34 @@ function formatLov(){
             let elementToObserve = top.document.querySelector(dialog);
             // se encontra o dialog do lov aplica o observador nele pra organizar a cada mudança
             if (elementToObserve) {
-                let aplicaOrganizeMenuLovs = new MutationObserver(function (
+                let aplicaOrganizaMenuLovs = new MutationObserver(function (
                     mutations
                 ) {
-                    top.organizeMenuLov(id, pageId, classMenuSelect, window);
+                    //Zmb - 12/12/2022 preciso esperar ser resolvida para eliminar uma classe que é inserida em tempo real pelo APEX
+                    let organizaMenuPromise = new Promise (async function(resolve, reject) {
+                        await organizaMenuLov(id, pageId, classMenuSelect, window); 
+                        resolve(true)                       
+                    })
+
+                    organizaMenuPromise.then(
+                        (resolve) => {
+                            try {
+                                let itemLov = $(`#${id}`)
+                                let itemLovIsMulti = itemLov.closest('li.apex-item-multi-item').length > 0 ? true : false
+                                
+                                if (itemLovIsMulti){
+                                    top.$("#PopupLov_" + pageId + "_" + id + "_dlg ul").children('.a-IconList-item').removeClass('a-IconList-item')
+                                }
+                            } catch (e) {
+                                console.warn(e)
+                            }
+                        }
+                    )
+                    //Fim Zmb - 12/12/2022 
                 });
 
                 try {
-                    aplicaOrganizeMenuLovs.observe(elementToObserve, {
+                    aplicaOrganizaMenuLovs.observe(elementToObserve, {
                         childList: true,
                     });
                 } catch (error) {
@@ -418,7 +462,7 @@ function formatLov(){
         }
     }
 
-    //cria um observador no DOM provurando as $('.organizaMenuLov')
+    //cria um observador no DOM provurando as $('.organizeMenuLov')
 
     let DOMobserver = new MutationObserver(function (mutations) {
         observeLOVS(mutations);
