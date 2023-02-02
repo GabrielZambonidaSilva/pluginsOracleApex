@@ -91,7 +91,7 @@ function organizaMenuLov(nomeLov, numeroPagina, classMenuSelect, window) {
          
     }
 
-   
+    
     const aplicaCheck = () => {
         if (itemLovIsMulti) {
             function eventCheckBoxLov(pThis) {
@@ -327,18 +327,18 @@ function organizaMenuLov(nomeLov, numeroPagina, classMenuSelect, window) {
                 //Pego a Linha com Menu e Sub Menu Junto
                 let t = e.innerText;
                 // Faço o IF, para ver se preciso executar a lógica ou o que esta renderizado ainda não foi tratado
-                if (t.indexOf("<groupRow>") >= 0) {
+                if (t.indexOf("<groupMenu>") >= 0) {
                     //Coleto Somente a Descrição do Menu
                     menu = t
                         .substr(
-                            t.indexOf("<groupRow>"),
-                            t.indexOf("</groupRow>")
+                            t.indexOf("<groupMenu>"),
+                            t.indexOf("</groupMenu>")
                         )
-                        .replaceAll("<groupRow>", "");
+                        .replaceAll("<groupMenu>", "");
                     // Coleto a Descrição do Menu Filho
                     menu_filho = t
-                        .substr(t.indexOf("</groupRow>"))
-                        .replaceAll("</groupRow>", "");
+                        .substr(t.indexOf("</groupMenu>"))
+                        .replaceAll("</groupMenu>", "");
                     
                     // Caso for a primeira Vez
                     if (menu_atual.length <= 0) {
@@ -523,7 +523,7 @@ function formatLov(){
                                 element
                                     .children()
                                     .text()
-                                    .includes("</groupRow>")
+                                    .includes("</groupMenu>")
                             ) {
                                 let botao = element.children().find("button");
                                 element
@@ -532,7 +532,7 @@ function formatLov(){
                                         element
                                             .children()
                                             .text()
-                                            .split("</groupRow>")[1]
+                                            .split("</groupMenu>")[1]
                                     );
                                 element.children().append(botao);
                             }
@@ -551,9 +551,9 @@ function formatLov(){
                 else {
                     // pega o displayValue
                     let displayValue = event.target.value.includes(
-                        "</groupRow>"
+                        "</groupMenu>"
                     )
-                        ? event.target.value.split("</groupRow>")[1]
+                        ? event.target.value.split("</groupMenu>")[1]
                         : event.target.value;
 
                     // seta o valor no LOV
