@@ -1,4 +1,17 @@
+// //Cria Elemento
+// const getNode = (type) => {
+//     return document.createElement(type)
+// }
 
+
+//Seta os atributos de uma só vez
+// const setAttributes = (elem, attrs) => {
+//     for(var key in attrs) {
+//         elem.setAttribute(key, attrs[key]);
+//     }
+
+//     return elem
+// }
 // Atribuir valor para POP LOV
 function setValuePOPLOV(itemId, value, displayValue, suprimirAlteracao) {
     apex.item(itemId).setValue(value, displayValue, suprimirAlteracao ?? false);
@@ -11,12 +24,16 @@ function organizaMenuLov(nomeLov, numeroPagina, classMenuSelect, window) {
     let linha = document.querySelectorAll(
         "#PopupLov_" + numeroPagina + "_" + nomeLov + "_dlg ul li:not([menu-id])"
     );
-    
-    var iframe
+    //coleto o contexto
+    let iframe
     let iframeLen
-    var innerDoc
+    let innerDoc
+
+    //item Lov
     let itemLov
+    //Item lov se for multi columns
     let itemLovIsMulti
+    
 
     try {
         iframe = document.getElementsByTagName('iframe');
@@ -28,10 +45,10 @@ function organizaMenuLov(nomeLov, numeroPagina, classMenuSelect, window) {
     } catch (error) {
         itemLov = $(`#${nomeLov}`)
         itemLovIsMulti = $(itemLov).closest('li.apex-item-multi-item').length > 0 ? true : false
-        
     }
-    
 
+    //Item Lov se conter classe para negação de selecao
+    let itemLovAction = $(itemLov).hasClass('checkAction')
 
     const eventRemove = () => {
         // Map nos elementos que estão adicionados no input(Selecionados) e adicionamos um event no click do remove do elemento
@@ -74,6 +91,7 @@ function organizaMenuLov(nomeLov, numeroPagina, classMenuSelect, window) {
          
     }
 
+   
     const aplicaCheck = () => {
         if (itemLovIsMulti) {
             function eventCheckBoxLov(pThis) {
@@ -178,6 +196,7 @@ function organizaMenuLov(nomeLov, numeroPagina, classMenuSelect, window) {
                     }
                 )
             })
+            
         }
     }
     //Zmb - 08/12/2022 FIM
@@ -350,7 +369,7 @@ function organizaMenuLov(nomeLov, numeroPagina, classMenuSelect, window) {
                             e.before($(novoTitulo)[0]);
                         } else {
                             //caso exista o menu pai em tela então eu apenas recupero o menu-id dele para passar para seus novos filhos, e no próximo será somada a variável cont para o próximo pai
-                            cont = toNumber($(menuPaiExistente).attr('menu-id'))
+                            cont = parseInt($(menuPaiExistente).attr('menu-id'))
                         }
                     } else if (menu_atual != menu) {
                         //alimento o contador
@@ -380,7 +399,7 @@ function organizaMenuLov(nomeLov, numeroPagina, classMenuSelect, window) {
                             e.before($(novoTitulo)[0])
                         } else {
                             //caso exista o menu pai em tela então eu apenas recupero o menu-id dele para passar para seus novos filhos, e no próximo será somada a variável cont para o próximo pai
-                            cont = toNumber($(menuPaiExistente).attr('menu-id'))
+                            cont = parseInt($(menuPaiExistente).attr('menu-id'))
                         }
                     }
     
