@@ -156,7 +156,7 @@ const setValuesLOV = (displayValues, returnValues, nomeLov, numeroPagina) => {
     //Aplico Evento no X
     eventRemove(numeroPagina, nomeLov)
     //Removo o ITEM da Visualização
-    $(itemLov).closest('ul.apex-item-multi').find('.apex-item-multi-item[data-value="NOT"]').css('display', 'none')
+    $(innerDoc?.getElementById(nomeLov) ?? document.getElementById(nomeLov)).closest('ul.apex-item-multi').find('.apex-item-multi-item[data-value="NOT"]').css('display', 'none')
     //Atrelo o Label 
     let elemLabel = $((document.getElementById(nomeLov)?.closest('div.t-Form-fieldContainer') ?? innerDoc?.getElementById(nomeLov).closest('div.t-Form-fieldContainer'))).find('div.t-Form-labelContainer label.t-Form-label')
     let labelAtual = elemLabel.text()
