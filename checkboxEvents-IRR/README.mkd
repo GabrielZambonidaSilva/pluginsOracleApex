@@ -1,1 +1,58 @@
+##Plugin - Checkbox IRR
+---
+#####Instalação:
+1. **Criar Processo de Aplicativo**:
+    - Acesse o ambiente de desenvolvimento
+    - Navegue até o aplicativo desejado
+    - Acesse Componentes Compartilhados -> Lógica do Aplicativo -> Processos do Aplicativo
+    - **Clique em Criar**: 
+        - Nome = CHANGE_COLLECTION
+        - Sequência = 1
+        - Ponto = Ajax Callback
+        - Clique em Próximo e cole o código changeCollection.plsql na area proposta e confirme a criação do processo
+2. **Instalar o Plugin Javascript de Ação Dinâmica**
+    - Acesse Componentes Compartilhados -> Outros Componentes -> Plugins
+    - Clique em Importar e Importe o Arquivo
+---
+#####Como Usar:
+1. **Criar Ação Dinâmica**:
+    - Evento: Carregamento de Página
+2. **Condição Verdadeira**:
+    - **Ação**: CheckBox - IRR Region
+    - **Array Selector**:
+    ```javascript
+        [
+            {
+                "queryCheckAll": ".selectAllA",
+                "collectionName": "checkbox",
+                "buttonClear": "#button",
+                "clearCollectionOnPageLoad": false,
+                "checkColumn": {
+                    "queryCheck": ".selectChild",
+                    "attrValue": "data-id"
+                }
+            },
+            {
+                "queryCheckAll": ".selectAllB",
+                "collectionName": "checkboxB",
+                "buttonClear": "#button2",
+                "clearCollectionOnPageLoad": true,
+                "checkColumn": {
+                    "queryCheck": ".selectChildb",
+                    "attrValue": "data-id"
+                }
+            }
+        ]
+    ```
+    - **Detalhes do Array**:
+        - **queryCheckAll**: Aqui deve conter o seletor do acionador que irá marcar todas as checkbox contidas no objeto checkColumn
+        - **collectionName**: O nome da Collection que deseja salvar os dados (Será salvo na coluna C001 pois aceita string e number)
+        - **buttonClear**: Aqui deve conter o seletor do acionador do evento de limpar toda a collection e redefinir a seleção das checkbox
+        - **clearCollectionOnPageLoad**: true ou false - Aqui indica para o plugin se ao recarregar a página os valores da collection devem ser apagados ou preservados
+        - **checkColumn**:
+            - **queryCheck**: Aqui deve conter o seletor da checkbox que está nas linhas do IRR
+            - **attrValue**: Aqui deve conter a informacao do atributo que guarda o valor que será inserido na collection. Ex: data-id
 
+3. **Static Region Selector**: Aqui deve conter o seletor do container que envolve a região que precisa ser colocados os eventos, isso serve para ocupar os mesmos seletores de IRR mas em containers diferentes.
+**Ex**: Possuo um IRR com ID #listagemOperacao e outro com ID #listagemAutorizacao porém ambos possuem as mesmas classes nas checkbox, o seletor da região estatica irá saber onde deve atribuir os eventos evitando que sejam disparados em IRR's diferentes dos propostos.
+Pode-se utilizar o seletor body caso queira abrangir o corpo inteiro da página
