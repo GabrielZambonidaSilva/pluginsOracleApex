@@ -4,6 +4,7 @@ let elemCheckArr = [
         "collectionName": "checkbox",
         "buttonClear": "#button",
         "clearCollectionOnPageLoad": false,
+        "callback": () => {console.log('Função de Callback de exemplo')},
         "checkColumn": {
             "queryCheck": ".selectChild",
             "attrValue": "data-id"
@@ -14,6 +15,7 @@ let elemCheckArr = [
         "collectionName": "checkboxB",
         "buttonClear": "#button2",
         "clearCollectionOnPageLoad": true,
+        "callback": () => {console.log('Função de Callback de exemplo')},
         "checkColumn": {
             "queryCheck": ".selectChildb",
             "attrValue": "data-id"
@@ -120,6 +122,13 @@ function changeCollection(elemCheck){
                     disable: false
                 }
             )
+
+            //Função de Callback acionada a cada interação com checkbox individual ou checkbox "todos"
+            try {
+                elemCheckArr.filter(elem => elem.collectionName == e.collectionName)[0].callback()
+            } catch (error) {
+                console.warn(error)
+            }
         })
     })
 }
@@ -344,7 +353,7 @@ function setEventElements(elemCheckArr) {
                     }
                 )
 
-                changeCollection(elemArrayState)
+                changeCollection(elemArrayState, callback)
                 elemArrayState = []
 
             }) 
