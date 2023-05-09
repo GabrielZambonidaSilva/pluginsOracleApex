@@ -379,7 +379,7 @@ function setEventElements(elemCheckArr) {
         }
         // Add Event in Button Check
         if (e.buttonClear?.length > 0){
-            $(staticRegion + e.buttonClear).on('click', (elem) => {
+            $(e.buttonClear).on('click', (elem) => {
                 elem.stopImmediatePropagation()
                 deleteCollection({collectionName: e.collectionName})
             })     
