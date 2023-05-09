@@ -28,7 +28,7 @@ prompt APPLICATION 120 - ERP
 -- Application Export:
 --   Application:     120
 --   Name:            ERP
---   Date and Time:   13:43 Terça-Feira Maio 9, 2023
+--   Date and Time:   15:56 Terça-Feira Maio 9, 2023
 --   Exported By:     BEEASY.GABRIEL
 --   Flashback:       0
 --   Export Type:     Component Export
@@ -170,7 +170,7 @@ unistr('        ] - Para que acione o callback de gerenciamento das collections 
 '',
 unistr('                     //Fun\00E7\00E3o de Callback acionada a cada intera\00E7\00E3o com checkbox individual ou checkbox "todos"'),
 '                    try {',
-'                        elemCheckArr.filter(elem => elem.collectionName == e.collectionName)[0].callback()',
+'                        elemCheckArr.filter(elem => elem.collectionName == e.collectionName)[0].callback(e)',
 '                    } catch (error) {',
 '                        console.warn(error)',
 '                    }',

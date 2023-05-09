@@ -125,7 +125,7 @@ function changeCollection(elemCheck){
 
             //Função de Callback acionada a cada interação com checkbox individual ou checkbox "todos"
             try {
-                elemCheckArr.filter(elem => elem.collectionName == e.collectionName)[0].callback()
+                elemCheckArr.filter(elem => elem.collectionName == e.collectionName)[0].callback(e)
             } catch (error) {
                 console.warn(error)
             }
