@@ -1,0 +1,71 @@
+#Plugin - Filter Control
+#### Descrição:
+Habilita um botão ao lado de um campo de filtro para que sejam redefinidos os valores para o valor padrão da filtragem. 
+
+![Botão com o Controle](item.jpg)
+    ------------
+#### Como usar:
+1. Crie a ação dinâmica com as seguintes configurações:
+    **Evento**: Carregamento de Página
+    **Condição**: True
+    **Ação**: Filter Control 
+
+2. Configure as Definições do Plugin:
+    **Selector JS - Button Filter**: Informe o seletor do botão aplicar filtros, obrigatório para que o plugin consiga inserir o outro controle ao lado
+    ![Selector JS](seletorJS.jpg)
+
+    **Parameters Button Clear**: Necessário passar um JSON onde contém uma função de callback que define o que acontecera quando clicar no botão de limpar
+    ![Parameters](parameters.jpg)
+
+    JSON de Exemplo
+    ```js
+    {
+        "funcaoLimpaFiltro": () => {
+            //Array do itens para voltar os valores default
+            const arrItem = [
+                'P246_EMPRESA', 
+                'P246_TIPO_PERIODO', 
+                'P246_DATA_INICIO', 
+                'P246_DATA_FIM', 
+                'P246_CONTAS_PAGAR', 
+                'P246_TITULO', 
+                'P246_DOCUMENTO', 
+                'P246_PEDIDO_COMPRA', 
+                'P246_CONTA', 
+                'P246_CENTRO_CUSTO', 
+                'P246_CATEGORIA', 
+                'P246_FORNECEDOR', 
+                'P246_ORIGEM', 
+                'P246_CONFERIDO', 
+                'P246_DE', 
+                'P246_ATE', 
+                'P246_EFETUADO_EM'
+            ] 
+            
+            arrItem.forEach((e) => {
+
+                switch (apex.item(e).item_type) {                
+                    //Valor Default Data Item
+                    case "OJ-INPUT-DATE": {
+                        apex.item(e).reinit(apex.item(e)._initialValue)
+                        break
+                    }
+                    case "SELECT": {
+                        apex.item(e).setValue(apex.item(e).nullValue)
+                        break
+                    }
+                    case "POPUP_KEY_LOV": {
+                        apex.item(e).refresh()
+                        break
+                    }
+                    case "NUMBER": {
+                        apex.item(e).setValue(apex.item(e)._min)
+                        break
+                    }
+
+                }
+            
+            })
+        }
+    }
+    ```
