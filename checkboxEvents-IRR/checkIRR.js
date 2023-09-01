@@ -332,7 +332,7 @@ function setEventElements(elemCheckArr) {
         if (e.queryCheckAll?.length > 0) {
             $(staticRegion + e.queryCheckAll).on('click', (elem) => {
                 elem.stopPropagation()
-                $(staticRegion + e.checkColumn.queryCheck).prop('checked', $(elem.target).is(':checked'))  
+                $(staticRegion + e.checkColumn.queryCheck).not('disabled').prop('checked', $(elem.target).is(':checked'))  
                 
                 $.map(
                     $(staticRegion + e.checkColumn.queryCheck),

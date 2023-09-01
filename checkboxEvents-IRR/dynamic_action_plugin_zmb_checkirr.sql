@@ -28,7 +28,7 @@ prompt APPLICATION 120 - ERP
 -- Application Export:
 --   Application:     120
 --   Name:            ERP
---   Date and Time:   15:56 Terça-Feira Maio 9, 2023
+--   Date and Time:   09:05 Sexta-Feira Setembro 1, 2023
 --   Exported By:     BEEASY.GABRIEL
 --   Flashback:       0
 --   Export Type:     Component Export
@@ -168,7 +168,7 @@ unistr('        ] - Para que acione o callback de gerenciamento das collections 
 '                        }',
 '                    )',
 '',
-unistr('                     //Fun\00E7\00E3o de Callback acionada a cada intera\00E7\00E3o com checkbox individual ou checkbox "todos"'),
+unistr('                    //Fun\00E7\00E3o de Callback acionada a cada intera\00E7\00E3o com checkbox individual ou checkbox "todos"'),
 '                    try {',
 '                        elemCheckArr.filter(elem => elem.collectionName == e.collectionName)[0].callback(e)',
 '                    } catch (error) {',
@@ -377,7 +377,7 @@ unistr('        ] - Para que fa\00E7a as buscas e atribua o evento correto a cad
 '                if (e.queryCheckAll?.length > 0) {',
 '                    $(staticRegion + e.queryCheckAll).on(''click'', (elem) => {',
 '                        elem.stopPropagation()',
-'                        $(staticRegion + e.checkColumn.queryCheck).prop(''checked'', $(elem.target).is('':checked''))  ',
+'                        $(staticRegion + e.checkColumn.queryCheck).not(''disabled'').prop(''checked'', $(elem.target).is('':checked''))  ',
 '                        ',
 '                        $.map(',
 '                            $(staticRegion + e.checkColumn.queryCheck),',
@@ -398,7 +398,7 @@ unistr('        ] - Para que fa\00E7a as buscas e atribua o evento correto a cad
 '                            }',
 '                        )',
 '',
-'                        changeCollection(elemArrayState)',
+'                        changeCollection(elemArrayState, callback)',
 '                        elemArrayState = []',
 '',
 '                    }) ',
@@ -434,6 +434,22 @@ unistr('        ] - Para que fa\00E7a as buscas e atribua o evento correto a cad
 '',
 '',
 '        function init() {',
+unistr('            //Fa\00E7o a cria\00E7\00E3o das collections'),
+'            createCollection(elemCheckArr)',
+unistr('            //Aciono a atribui\00E7\00E3o de eventos para os elementos da p\00E1gina'),
+'            setEventElements(elemCheckArr)',
+unistr('            //Adiciono Eventos na Regi\00E3o estatica'),
+'            $(staticRegion).on(''apexafterrefresh'', () => {',
+'                listCollection(elemCheckArr); ',
+'                setEventElements(elemCheckArr);',
+'            });',
+'',
+'        }',
+'',
+'',
+'',
+'',
+'        function init() {',
 '            console.log(''Plugin Check IRR Inicializado'')',
 unistr('            //Fa\00E7o a cria\00E7\00E3o das collections'),
 '            createCollection(elemCheckArr)',
@@ -443,7 +459,6 @@ unistr('            //Adiciono Eventos na Regi\00E3o estatica'),
 '            $(staticRegion).on(''apexafterrefresh'', () => {',
 '                listCollection(elemCheckArr); ',
 '                setEventElements(elemCheckArr);',
-'                // setTimeout(() => {verifyStateCheckAll(elemCheckArr)}, 500);',
 '            });',
 '',
 '        }',
