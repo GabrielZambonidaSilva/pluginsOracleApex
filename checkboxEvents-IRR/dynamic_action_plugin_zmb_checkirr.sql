@@ -28,7 +28,7 @@ prompt APPLICATION 120 - ERP
 -- Application Export:
 --   Application:     120
 --   Name:            ERP
---   Date and Time:   09:05 Sexta-Feira Setembro 1, 2023
+--   Date and Time:   09:16 Sexta-Feira Setembro 1, 2023
 --   Exported By:     BEEASY.GABRIEL
 --   Flashback:       0
 --   Export Type:     Component Export
@@ -398,7 +398,8 @@ unistr('        ] - Para que fa\00E7a as buscas e atribua o evento correto a cad
 '                            }',
 '                        )',
 '',
-'                        changeCollection(elemArrayState, callback)',
+'                        // changeCollection(elemArrayState, callback)',
+'                        changeCollection(elemArrayState)',
 '                        elemArrayState = []',
 '',
 '                    }) ',

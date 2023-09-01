@@ -111,7 +111,7 @@ function changeCollection(elemCheck){
         console.log(e)
     }).fail((e) => {
         console.warn(e)
-    }).always((e) => {
+    }).always((_e) => {
         //Habilito para evitar os cliques
         elemArray.forEach((e) => {
             eventCheckBox(
@@ -211,7 +211,7 @@ function listCollection(elemCheckArr){
 
     }).fail((e) => {
         console.warn(e)
-    }).always((e) => {
+    }).always((_e) => {
         verifyStateCheckAll(elemCheckArr)
     })
 }
@@ -353,7 +353,8 @@ function setEventElements(elemCheckArr) {
                     }
                 )
 
-                changeCollection(elemArrayState, callback)
+                // changeCollection(elemArrayState, callback)
+                changeCollection(elemArrayState)
                 elemArrayState = []
 
             }) 
