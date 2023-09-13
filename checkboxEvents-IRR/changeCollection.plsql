@@ -1,5 +1,3 @@
--->> Nome do Callback deve ser CHANGE_COLLECION
-
 DECLARE
     V_TYPE              APEX_APPLICATION.G_X01%TYPE := APEX_APPLICATION.G_X01;
     V_SEQ_ID            INTEGER;
@@ -7,7 +5,8 @@ DECLARE
     V_IDS               CLOB;
     V_IDS_LIST          CLOB;
     V_C001              VARCHAR2(1000);
-    V_ARR               APEX_APPLICATION.G_F01%TYPE := APEX_APPLICATION.G_F01 ;
+    V_ARR               APEX_APPLICATION.G_F01%TYPE := APEX_APPLICATION.G_F01;
+    V_ARR_CLOB          CLOB;
 
 
     V_JSON_ARR          JSON_ARRAY_T;
@@ -19,10 +18,20 @@ DECLARE
 
 
 BEGIN
+    /* ZMB
+        13/09/2023 11:39
+        ADICIONADO A CONCATENAÇÃO DOS VALORES, POIS QUANDO ESTOURA LIMITE ELE MANDA EM OUTRO INDICE DO ARRAY
+    ZMB */
+
+    FOR I IN 1..V_ARR.COUNT LOOP
+        V_ARR_CLOB := V_ARR_CLOB || V_ARR(I);
+    END LOOP;
+
     -->> VERIFICO O TIPO DE SOLICITAÇÃO
     IF UPPER(V_TYPE) = 'CREATE' THEN
         V_JSON_ARR := JSON_ARRAY_T(
-            V_ARR(1)
+            -- V_ARR(1)
+            V_ARR_CLOB
         );
         
         FOR I IN 0..V_JSON_ARR.GET_SIZE - 1 LOOP
@@ -51,7 +60,8 @@ BEGIN
 
     ELSIF UPPER(V_TYPE) = 'CHANGE' THEN
         V_JSON_ARR := JSON_ARRAY_T(
-            V_ARR(1)
+            -- V_ARR(1)
+            V_ARR_CLOB
         );
         
         FOR I IN 0..V_JSON_ARR.GET_SIZE - 1 LOOP
@@ -82,10 +92,15 @@ BEGIN
             
             
             IF UPPER(V_JSON_OBJ.GET_STRING('checked')) = 'TRUE' THEN
-                APEX_COLLECTION.ADD_MEMBER(
-                    P_COLLECTION_NAME => V_COLLECTION_NAME,
-                    P_C001 => V_C001
-                );
+                BEGIN
+                    APEX_COLLECTION.ADD_MEMBER(
+                        P_COLLECTION_NAME => V_COLLECTION_NAME,
+                        P_C001 => V_C001
+                    );
+                EXCEPTION
+                    WHEN OTHERS THEN
+                        NULL;
+                END;
             END IF;
         END LOOP;
 
@@ -98,7 +113,8 @@ BEGIN
     -->> Devolvo um array com todos os que estão na página e contém na collection
     ELSIF UPPER(V_TYPE) = 'LIST' THEN
         V_JSON_ARR := JSON_ARRAY_T(
-            V_ARR(1)
+            -- V_ARR(1)
+            V_ARR_CLOB
         );
 
         FOR I IN 0..V_JSON_ARR.GET_SIZE - 1 LOOP
@@ -142,7 +158,8 @@ BEGIN
     -->> DELETE MEMBERS COLLECTION
     ELSIF UPPER(V_TYPE) = 'DELETE' THEN
         V_JSON_OBJ := JSON_OBJECT_T.PARSE(
-            V_ARR(1)
+            -- V_ARR(1)
+            V_ARR_CLOB
         );
 
         V_COLLECTION_NAME := V_JSON_OBJ.GET_STRING('collectionName');
