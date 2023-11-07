@@ -268,6 +268,151 @@ function organizaMenuLov(nomeLov, numeroPagina, classMenuSelect, window) {
         FIM ZMB 02/02/2023
     */
 
+    /*
+        ZMB 07/11/2023
+        Item Status Ativo ou Inativo
+    */
+    const itemLovActiveInactive = $(itemLov).hasClass('btnActiveInactive')
+
+    function criarBotaoMostraEscondeLojasInativas() {
+        let seletorDivAvo = top.$('#PopupLov_' + numeroPagina + '_' + nomeLov + '_dlg')
+
+        let seletorDivPai = seletorDivAvo.find('.a-PopupLOV-searchBar');
+
+        //* Validação para não criar dois botões
+        if (seletorDivPai.find('#mostrarLojasInativas').length === 0) {
+            //* Criação do HTML do botão com o listener
+            const novoBotaoMostrarLojasInativas = document.createElement('button')
+
+            setAttributesNode(
+                novoBotaoMostrarLojasInativas,
+                {
+                    "title": "Mostrar Lojas Inativas", 
+                    "id": "mostrarLojasInativas", 
+                    "type": "button", 
+                    "class": "a-Button", 
+                    "aria-label": "Mostrar Inativos", 
+                    "style": "margin-left: var(--a-button-gap-x,8px)"
+                }
+            )
+            
+            novoBotaoMostrarLojasInativas.addEventListener('click', () => {clickBotaoMostrarLojasInativas(event)})
+            const novoSpanMostrarLojasInativas = document.createElement('span')
+
+            setAttributesNode(
+                novoSpanMostrarLojasInativas,
+                {
+                    "id": "iconeBotao" ,
+                    "class": "fa fa-tasks-alt" ,
+                    "style": "color: green;"
+                }
+            )
+            
+            novoBotaoMostrarLojasInativas.append(novoSpanMostrarLojasInativas)
+            //* Coloca o botão ao lado do botão Pesquisar
+            seletorDivPai.append(novoBotaoMostrarLojasInativas);
+        }
+    }
+
+    function alterarEstiloBotaoMostrarLojasInativas(botaoMostrarLojasInativas, eParaMostrarInativos) {
+        let iconeBotao  = $('#iconeBotao');
+
+        alterarTitleBotao(eParaMostrarInativos, botaoMostrarLojasInativas);
+
+        estilizarIconeBotao(eParaMostrarInativos, iconeBotao);
+    }
+
+    function desabilitarBotao(botaoMostrarLojasInativas) {
+        botaoMostrarLojasInativas.prop('disabled', true);
+
+        //* Desabilita o botão por 1s (1000ms)
+        setTimeout(function() {
+            botaoMostrarLojasInativas.prop('disabled', false);
+        }, 1000);
+    }
+
+    function estilizarIconeBotao(eParaMostrarInativos, iconeBotao) {
+        //* Altera cor e ícone
+        if (eParaMostrarInativos) {
+            iconeBotao.css('color', 'burlywood');
+            iconeBotao.removeClass('fa-tasks-alt').addClass('fa-list');
+        } else {
+            iconeBotao.css('color', 'green');
+            iconeBotao.removeClass('fa-list').addClass('fa-tasks-alt');
+        }
+    }
+
+    function alterarTitleBotao(eParaMostrarInativos, botaoMostrarLojasInativas) {
+        if (eParaMostrarInativos) {
+            botaoMostrarLojasInativas.attr('title', 'Mostrar Lojas Inativas');
+        } else {
+            botaoMostrarLojasInativas.attr('title', 'Mostrar Somente Lojas Ativas');
+        }
+    }
+
+    function preencherItemMostrarLojasInativas(eParaMostrarInativos, itemMostrarLojasInativas) {
+        if (eParaMostrarInativos) {
+            apex.item(itemMostrarLojasInativas).setValue('1');
+        } else {
+            apex.item(itemMostrarLojasInativas).setValue('0');
+        }
+    }
+
+    function recarregarRegiaoPesquisa(itemMostrarLojasInativas) {
+        //* Pesquisa '%' ou '%%' e depois limpa o campo, forçando o refresh
+        let dlgLov = top.$('#PopupLov_' + numeroPagina + '_' + nomeLov + '_dlg');
+        const dlgLovSearchInput = $(dlgLov).find('input.a-PopupLOV-search')
+        dlgLovSearchInput.val(apex.item(itemMostrarLojasInativas).getValue() == '1' ? '%%' : '%')
+        dlgLov.find('.a-Button.a-PopupLOV-doSearch').click()
+        dlgLovSearchInput.val('')
+    }
+
+    function clickBotaoMostrarLojasInativas(event) {
+        //* Pega o id do item via event.target
+        try {
+    
+            const botaoMostrarLojasInativas = $('#' + event.target.id);
+    
+            let itemMostrarLojasInativas    = apex.item(nomeLov)?.node?.dataset?.nomeItemStatus;
+            let eParaMostrarInativos        =  (apex.item(itemMostrarLojasInativas).getValue() == '0');
+    
+            desabilitarBotao(botaoMostrarLojasInativas);
+    
+            preencherItemMostrarLojasInativas(eParaMostrarInativos, itemMostrarLojasInativas);
+    
+            alterarEstiloBotaoMostrarLojasInativas(botaoMostrarLojasInativas, eParaMostrarInativos);
+    
+            apex.item(nomeLov).refresh();
+    
+            recarregarRegiaoPesquisa(itemMostrarLojasInativas);
+        } catch(e) {
+            console.log('Error: ', e)
+        }
+    }
+
+    // AQUI É ADICIONADO O LISTENER NO ELEMENTO DE LOV POPUP DE INATIVOS OU ATIVOS
+    if (itemLovActiveInactive){
+ 
+        try {
+            //Precisa ter obrigatóriamente o parametro com o nome do item que receberá o status
+            if (
+                apex.item(nomeLov)?.node?.dataset?.nomeItemStatus?.length > 0 &&
+                top.$('#PopupLov_' + numeroPagina + '_' + nomeLov + '_dlg ul li').find('button#mostrarLojasInativas')?.length == 0
+            ) {
+
+                //* Listener
+                criarBotaoMostraEscondeLojasInativas();
+            }
+        } catch(e) {
+            console.log('error: ', e);
+        }
+    }
+   
+    
+    /*
+        ZMB 07/11/2023
+        Fim Item Status Ativo ou Inativo
+    */
 
     let aplicaCheck = () => {
         if (itemLovIsMulti) {
@@ -514,18 +659,18 @@ function organizaMenuLov(nomeLov, numeroPagina, classMenuSelect, window) {
             //Pego a Linha com Menu e Sub Menu Junto
             let t = e.innerText;
             // Faço o IF, para ver se preciso executar a lógica ou o que esta renderizado ainda não foi tratado
-            if (t.indexOf("<groupRow>") >= 0) {
+            if (t.indexOf("<menu-pai-nome>") >= 0) {
                 //Coleto Somente a Descrição do Menu
                 menu = t
                     .substr(
-                        t.indexOf("<groupRow>"),
-                        t.indexOf("</groupRow>")
+                        t.indexOf("<menu-pai-nome>"),
+                        t.indexOf("</menu-pai-nome>")
                     )
-                    .replaceAll("<groupRow>", "");
+                    .replaceAll("<menu-pai-nome>", "");
                 // Coleto a Descrição do Menu Filho
                 menu_filho = t
-                    .substr(t.indexOf("</groupRow>"))
-                    .replaceAll("</groupRow>", "");
+                    .substr(t.indexOf("</menu-pai-nome>"))
+                    .replaceAll("</menu-pai-nome>", "");
                 
                 // Caso for a primeira Vez
                 if (menu_atual.length <= 0) {
@@ -616,15 +761,18 @@ function organizaMenuLov(nomeLov, numeroPagina, classMenuSelect, window) {
     }
 }
 
-// roda no inicio da página procurando .organizeMenuLov e crriando o observer
+// roda no inicio da página procurando .organizaMenuLov e crriando o observer
 $(function () {
     function observeLOVS(mutations) {
-        let lovs = $(".organizeMenuLov");
+        let lovs = $(".organizaMenuLov");
         // para cada lov fica procurando se foi gerado o seu dialog
         for (let i = 0; i < lovs.length; i++) {
             const element = lovs[i];
             //Verifico seexiste a classe para selecionar pelo menu
             const classMenuSelect = $(element).hasClass("menuSelectChild");
+
+            //VERIFICO SE CONTÉM A CLASSE PARA ADICIONAR O BOTÃO QUE SETA VALOR A UM ITEM - ATIVO/INATIVO
+            // const classItem
 
             let id = element.id;
             let pageId = id.substr(1, id.indexOf("_") - 1);
@@ -671,7 +819,7 @@ $(function () {
         }
     }
 
-    //cria um observador no DOM provurando as $('.organizeMenuLov')
+    //cria um observador no DOM provurando as $('.organizaMenuLov')
 
     let DOMobserver = new MutationObserver(function (mutations) {
         observeLOVS(mutations);
@@ -688,7 +836,7 @@ $(function () {
     }
 
     // aplica as mudanças do displayValue
-    let lovs = $(".organizeMenuLov");
+    let lovs = $(".organizaMenuLov");
     for (let i = 0; i < lovs.length; i++) {
         const element = lovs[i];
 
@@ -712,7 +860,7 @@ $(function () {
                                 element
                                     .children()
                                     .text()
-                                    .includes("</groupRow>")
+                                    .includes("</menu-pai-nome>")
                             ) {
                                 let botao = element.children().find("button");
                                 element
@@ -721,7 +869,7 @@ $(function () {
                                         element
                                             .children()
                                             .text()
-                                            .split("</groupRow>")[1]
+                                            .split("</menu-pai-nome>")[1]
                                     );
                                 element.children().append(botao);
                             }
@@ -740,9 +888,9 @@ $(function () {
                 else {
                     // pega o displayValue
                     let displayValue = event.target.value.includes(
-                        "</groupRow>"
+                        "</menu-pai-nome>"
                     )
-                        ? event.target.value.split("</groupRow>")[1]
+                        ? event.target.value.split("</menu-pai-nome>")[1]
                         : event.target.value;
 
                     // seta o valor no LOV
@@ -762,7 +910,7 @@ $(function () {
 
                 2.2: A SQL Deve ser Neste Padrão....
 
-                    SELECT '<groupRow>' || NOME DO MENU PAI || '</groupRow>' || AQUI O MENU FILHO  AS NOME_QUE_QUISER,
+                    SELECT '<menu-pai-nome>' || NOME DO MENU PAI || '</menu-pai-nome>' || AQUI O MENU FILHO  AS NOME_QUE_QUISER,
                             PESSOA_ID
                     FROM TABELA
                     ORDER BY NOME_MENU
